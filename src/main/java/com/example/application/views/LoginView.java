@@ -1,5 +1,6 @@
 package com.example.application.views;
 
+import com.example.application.backend.AuthService;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.login.AbstractLogin;
 import com.vaadin.flow.component.login.LoginForm;
@@ -31,8 +32,17 @@ public class LoginView extends VerticalLayout {
     }
 
     private boolean authenticate(AbstractLogin.LoginEvent e) {
-        VaadinSession session = getUI().get().getSession();
-        return true;
+        String username = e.getUsername();
+        String password = e.getPassword();
+
+        if (AuthService.INSTANCE.authenticate(username, password)) {
+            VaadinSession session = getUI().get().getSession();
+            session.setAttribute("user", username);
+            session.setAttribute("password", password);
+            return true;
+        }
+
+        return false;
     }
 
 

@@ -1,0 +1,14 @@
+#master-detail-view {
+    display: block;
+    height: 100%;
+}
+
+div.employee-column {
+    border-radius: var(--lumo-border-radius);
+    box-shadow: var(--lumo-box-shadow-s);
+    padding: var(--lumo-space-s);
+}
+
+div.employee-column > h3 {
+    margin: 0;
+}

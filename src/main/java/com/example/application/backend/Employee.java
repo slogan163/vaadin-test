@@ -1,16 +1,20 @@
 package com.example.application.backend;
 
+import java.util.UUID;
+
 public class Employee {
 
+    private UUID id;
     private String firstname;
     private String lastname;
     private String title;
     private String email;
     private String notes;
 
-    public Employee(String firstname, String lastname, String email,
+    public Employee(UUID id, String firstname, String lastname, String email,
             String title) {
         super();
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -19,6 +23,14 @@ public class Employee {
 
     public Employee() {
 
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getFirstname() {

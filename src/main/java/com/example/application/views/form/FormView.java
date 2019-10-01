@@ -1,6 +1,7 @@
 package com.example.application.views.form;
 
 import com.example.application.MainView;
+import com.example.application.backend.BackendService;
 import com.example.application.backend.Employee;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
@@ -16,20 +17,21 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.router.*;
 
-@Route(value = "form", layout = MainView.class)
+import java.util.UUID;
+
+@Route(value = "patient", layout = MainView.class)
 @RouteAlias(value = "", layout = MainView.class)
 @PageTitle("Form")
 @CssImport("styles/views/form/form-view.css")
-public class FormView extends Div {
+public class FormView extends Div implements HasUrlParameter<String> {
 
     private TextField firstname = new TextField();
     private TextField lastname = new TextField();
     private TextField email = new TextField();
     private TextArea notes = new TextArea();
+    private Binder<Employee> binder;
 
     private Button cancel = new Button("Cancel");
     private Button save = new Button("Save");
@@ -43,17 +45,26 @@ public class FormView extends Div {
         createButtonLayout(wrapper);
 
         // Configure Form
-        Binder<Employee> binder = new Binder<>(Employee.class);
+
+        binder = new Binder<>(Employee.class);
 
         // Bind fields. This where you'd define e.g. validation rules
         binder.bindInstanceFields(this);
 
         cancel.addClickListener(e -> binder.readBean(null));
-        save.addClickListener(e -> {
-            Notification.show("Not implemented");
-        });
+        save.addClickListener(e -> BackendService.INSTANCE.save(binder.getBean()));
 
         add(wrapper);
+    }
+
+    @Override
+    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
+        if (parameter != null) {
+            UUID id = UUID.fromString(parameter);
+            binder.setBean(BackendService.INSTANCE.load(id));
+        } else {
+            Notification.show("No parameter");
+        }
     }
 
     private void createTitle(VerticalLayout wrapper) {
@@ -94,7 +105,7 @@ public class FormView extends Div {
     }
 
     private FormLayout.FormItem addFormItem(VerticalLayout wrapper,
-            FormLayout formLayout, Component field, String fieldName) {
+                                            FormLayout formLayout, Component field, String fieldName) {
         FormLayout.FormItem formItem = formLayout.addFormItem(field, fieldName);
         wrapper.add(formLayout);
         field.getElement().getClassList().add("full-width");

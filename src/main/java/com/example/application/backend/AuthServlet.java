@@ -3,17 +3,16 @@ package com.example.application.backend;
 import com.vaadin.flow.server.*;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
 import java.util.Arrays;
 
-@WebServlet(urlPatterns = "/*", asyncSupported = true)
+//@WebServlet(urlPatterns = "/*", asyncSupported = true)
 public class AuthServlet extends VaadinServlet {
 
     @Override
     protected void servletInitialized() throws ServletException {
         super.servletInitialized();
-        getService().addSessionInitListener(e -> e.getSession().addRequestHandler(new AuthRequestHandler()));
+//        getService().addSessionInitListener(e -> e.getSession().addRequestHandler(new AuthRequestHandler()));
     }
 
     protected class AuthRequestHandler extends SynchronizedRequestHandler {

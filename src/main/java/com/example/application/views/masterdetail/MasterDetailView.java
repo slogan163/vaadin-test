@@ -24,7 +24,7 @@ public class MasterDetailView extends Div implements AfterNavigationObserver {
     private final Grid<Employee> grid;
 
     public MasterDetailView() {
-        service = new BackendService();
+        service = BackendService.INSTANCE;
         setId("master-detail-view");
         grid = new Grid<>();
         grid.setId("list");

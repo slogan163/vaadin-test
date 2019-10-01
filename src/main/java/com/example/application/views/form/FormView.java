@@ -4,6 +4,7 @@ import com.example.application.MainView;
 import com.example.application.backend.BackendService;
 import com.example.application.backend.Employee;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -14,6 +15,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -60,11 +62,26 @@ public class FormView extends Div implements HasUrlParameter<String> {
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
         if (parameter != null) {
-            UUID id = UUID.fromString(parameter);
-            binder.setBean(BackendService.INSTANCE.load(id));
+            bindPatientId(parameter);
+            storePatientId(UI.getCurrent().getPage(), parameter);
         } else {
+            loadPatientId(UI.getCurrent().getPage());
             Notification.show("No parameter");
         }
+    }
+
+    private void storePatientId(Page page, String patientId) {
+        page.executeJs(String.format("localStorage.setItem('patientId', '%s')", patientId));
+    }
+
+    private void loadPatientId(Page page) {
+        page.executeJs("return localStorage.getItem('patientId')")
+                .then(String.class, this::bindPatientId);
+    }
+
+    private void bindPatientId(String patientId) {
+        UUID id = UUID.fromString(patientId);
+        binder.setBean(BackendService.INSTANCE.load(id));
     }
 
     private void createTitle(VerticalLayout wrapper) {

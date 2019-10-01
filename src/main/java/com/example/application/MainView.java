@@ -21,7 +21,7 @@ import java.util.List;
  * The main view is a top-level placeholder for other views.
  */
 @JsModule("./styles/shared-styles.js")
-@PWA(name = "Test", shortName = "Test")
+@PWA(name = "Test", shortName = "Test", startPath = "patient/")
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 public class MainView extends AppLayout {
 

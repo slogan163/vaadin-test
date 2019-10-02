@@ -1,24 +1,20 @@
-package com.example.application.backend;
+package com.example.application.backend
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*
 
 
-public class BackendService {
+class BackendService private constructor() {
 
-    public static BackendService INSTANCE = new BackendService();
+    private var employees: MutableList<Employee>? = null
 
-    private List<Employee> employees;
-
-    {
+    init {
         // Init dummy data
 
-        employees = new ArrayList<>();
-        employees.add(new Employee(UUID.fromString("e87dc893-f6cf-478e-8d7b-30639ed70436"), "Rowena", "Leeming", "rleeming0@bbc.co.uk", "Food Chemist"));
-        employees.add(new Employee(UUID.fromString("7489fdcd-a056-4447-9a3a-c6199c89288c"), "Alvinia", "Delong", "adelong1@altervista.org", "Recruiting Manager"));
-        employees.add(new Employee(UUID.fromString("bb18583e-af29-4f9c-94c6-037a08a47ee9"), "Leodora", "Burry", "lburry2@example.com", "Food Chemist"));
-        employees.add(new Employee(UUID.fromString("1fd2671d-c02f-4576-8200-0414c9d30ad9"), "Karen", "Oaten", "koaten3@ihg.com", "VP Sales"));
+        employees = ArrayList()
+        employees!!.add(Employee(UUID.fromString("e87dc893-f6cf-478e-8d7b-30639ed70436"), "Rowena", "Leeming", "rleeming0@bbc.co.uk", "Food Chemist"))
+        employees!!.add(Employee(UUID.fromString("7489fdcd-a056-4447-9a3a-c6199c89288c"), "Alvinia", "Delong", "adelong1@altervista.org", "Recruiting Manager"))
+        employees!!.add(Employee(UUID.fromString("bb18583e-af29-4f9c-94c6-037a08a47ee9"), "Leodora", "Burry", "lburry2@example.com", "Food Chemist"))
+        employees!!.add(Employee(UUID.fromString("1fd2671d-c02f-4576-8200-0414c9d30ad9"), "Karen", "Oaten", "koaten3@ihg.com", "VP Sales"))
         /*employees.add(new Employee("Mariele", "Huke", "mhuke4@washingtonpost.com", "Research Assistant IV"));
         employees.add(new Employee("Grata", "Widdowes", "gwiddowes5@cargocollective.com", "Actuary"));
         employees.add(new Employee("Donna", "Roadknight", "droadknight6@apache.org", "Mechanical Systems Engineer"));
@@ -39,22 +35,23 @@ public class BackendService {
         employees.add(new Employee("Cchaddie", "Spatarul", "cspatarull@sun.com", "Business Systems Development Analyst"));*/
     }
 
-    private BackendService() {
+    fun getEmployees(): List<Employee>? {
+        return employees
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
+    fun save(employee: Employee) {
+        employees!!.removeIf { emp -> employee.id == emp.id }
+        employees!!.add(employee)
     }
 
-    public void save(Employee employee) {
-        employees.removeIf(emp -> employee.getId().equals(emp.getId()));
-        employees.add(employee);
-    }
-
-    public Employee load(UUID id) {
-        return employees.stream()
-                .filter(employee -> id.equals(employee.getId()))
+    fun load(id: UUID): Employee {
+        return employees!!.stream()
+                .filter { employee -> id == employee.id }
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("No employee with id: " + id));
+                .orElseThrow { RuntimeException("No employee with id: $id") }
+    }
+
+    companion object {
+        var INSTANCE = BackendService()
     }
 }

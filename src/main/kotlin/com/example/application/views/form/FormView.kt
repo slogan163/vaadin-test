@@ -52,8 +52,8 @@ class FormView : Div(), HasUrlParameter<String> {
         // Bind fields. This where you'd define e.g. validation rules
         binder.bindInstanceFields(this)
 
-        cancel.addClickListener { e -> binder.readBean(null) }
-        save.addClickListener { e -> BackendService.INSTANCE.save(binder.bean) }
+        cancel.addClickListener { binder.readBean(null) }
+        save.addClickListener { BackendService.save(binder.bean) }
 
         add(wrapper)
     }
@@ -74,12 +74,12 @@ class FormView : Div(), HasUrlParameter<String> {
 
     private fun loadPatientId(page: Page) {
         page.executeJs("return localStorage.getItem('patientId')")
-                .then(String::class.java, { this.bindPatientId(it) })
+                .then(String::class.java) { this.bindPatientId(it) }
     }
 
     private fun bindPatientId(patientId: String) {
         val id = UUID.fromString(patientId)
-        binder.bean = BackendService.INSTANCE.load(id)
+        binder.bean = BackendService.load(id)
     }
 
     private fun createTitle(wrapper: VerticalLayout) {

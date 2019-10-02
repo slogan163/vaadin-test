@@ -20,11 +20,9 @@ import com.vaadin.flow.router.Route
 @CssImport("styles/views/masterdetail/master-detail-view.css")
 class MasterDetailView : Div(), AfterNavigationObserver {
 
-    private val service: BackendService
     private val grid: Grid<Employee>
 
     init {
-        service = BackendService.INSTANCE
         setId("master-detail-view")
         grid = Grid()
         grid.setId("list")
@@ -48,6 +46,6 @@ class MasterDetailView : Div(), AfterNavigationObserver {
     override fun afterNavigation(event: AfterNavigationEvent) {
         // Lazy init of the grid items, happens only when we are sure the view will be
         // shown to the user
-        grid.setItems(service.getEmployees()!!)
+        grid.setItems(BackendService.getEmployees())
     }
 }

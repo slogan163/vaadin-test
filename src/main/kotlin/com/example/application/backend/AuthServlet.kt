@@ -22,7 +22,7 @@ class AuthServlet : VaadinServlet() {
                 val user = session.getAttribute("user") as String
                 val password = session.getAttribute("password") as String
 
-                if (!AuthService.INSTANCE.authenticate(user, password)) {
+                if (!AuthService.authenticate(user, password)) {
                     (response as VaadinServletResponse).httpServletResponse.sendRedirect("/login")
                     return true
                 }

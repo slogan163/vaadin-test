@@ -31,7 +31,7 @@ class LoginView : VerticalLayout() {
         val username = e.username
         val password = e.password
 
-        if (AuthService.INSTANCE.authenticate(username, password)) {
+        if (AuthService.authenticate(username, password)) {
             val session = ui.get().session
             session.setAttribute("user", username)
             session.setAttribute("password", password)
